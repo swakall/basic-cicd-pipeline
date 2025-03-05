@@ -10,9 +10,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Print a Debug Message
-        run: echo "Hello, GitHub Actions! This is a test log."
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
 
-      - name: List Files in the Repo
-        run: ls -lah
+      - name: Install Dependencies
+        run: pip install -r requirements.txt || echo "No requirements.txt found, skipping."
+
+      - name: Run Unit Tests
+        run: python -m unittest test_app.py
 
