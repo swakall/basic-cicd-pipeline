@@ -1,0 +1,28 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || echo "No requirements.txt found, skipping."
+
+      - name: Start the Flask app
+        run: |
+          python app.py &  # Run in the background
+          sleep 5          # Wait for the server to start
+
+      - name: Check if server is running
+        run: curl -f http://localhost:5000 || exit 1
+
+      - name: Run tests
+        run: python -m unittest test_app.py
+
